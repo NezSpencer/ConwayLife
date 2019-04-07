@@ -52,11 +52,11 @@ class MainActivityViewModel : ViewModel(), CoroutineScope{
             }
         } else if (rowIndex % (row - 1) == 0) {
             //left and right edges
-            for (i in rowIndex - 1..rowIndex + 1 step 2) {
+            for (i in rowIndex - 1..rowIndex + 1) {
                 if (i < 0 || i >= row)
                     continue
                 for (j in 0 until column step column - 1) {
-                    if (i != rowIndex && j != colIndex && boardMirror[i][j] == 1) {
+                    if ((i != rowIndex || j != colIndex) && boardMirror[i][j] == 1) {
                         aliveCount++
                     }
                 }
@@ -64,10 +64,10 @@ class MainActivityViewModel : ViewModel(), CoroutineScope{
         } else if (colIndex % (column - 1) == 0) {
             //top and bottom edges
             for (i in 0 until row step row - 1) {
-                for (j in colIndex - 1..colIndex + 1 step 2) {
+                for (j in colIndex - 1..colIndex + 1) {
                     if (j < 0 || j >= column)
                         continue
-                    if (i != rowIndex && j != colIndex && boardMirror[i][j] == 1) {
+                    if ((i != rowIndex || j != colIndex) && boardMirror[i][j] == 1) {
                         aliveCount++
                     }
                 }
@@ -75,19 +75,19 @@ class MainActivityViewModel : ViewModel(), CoroutineScope{
         }
 
         //for positions within the normal range
-        for (i in rowIndex - 1..rowIndex + 1 step 2) {
+        for (i in rowIndex - 1..rowIndex + 1) {
             if (i < 0 || i >= row)
                 continue
-            for (j in colIndex - 1..colIndex + 1 step 2) {
+            for (j in colIndex - 1..colIndex + 1) {
                 if (j < 0 || j >= column)
                     continue
-                if (boardMirror[i][j] == 1)
+                if ((i != rowIndex || j != column) && boardMirror[i][j] == 1)
                     aliveCount++
 
             }
         }
 
-        return aliveCount == 2
+        return aliveCount in 1..2
     }
 
 
