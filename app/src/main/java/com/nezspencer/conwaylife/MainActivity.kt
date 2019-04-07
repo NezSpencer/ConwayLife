@@ -3,9 +3,9 @@ package com.nezspencer.conwaylife
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextUtils
@@ -16,8 +16,6 @@ import android.view.ViewGroup
 import android.widget.*
 import com.nezspencer.conwaylife.databinding.ActivityMainBinding
 import com.nezspencer.conwaylife.databinding.ItemAliveBinding
-import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
 
