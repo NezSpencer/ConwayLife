@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeBottomSheetViews(){
         val sheetBehaviour = BottomSheetBehavior.from(binding.configSheet.sheetItem)
+        sheetBehaviour.state = BottomSheetBehavior.STATE_EXPANDED
         binding.configSheet.btnConfigure.setOnClickListener{
 
             binding.board.removeAllViews()
@@ -139,7 +140,7 @@ class MainActivity : AppCompatActivity() {
         itemParams.setMargins(1, 1, 1, 1)
 
         boardItems = Array(row) { Array(column) { TextView(this) } }
-        var boardMirror = Array(row) {Array(column) {0}}
+        val boardMirror = Array(row) {Array(column) {0}}
         for (i in 0 until row) {
             val tableRow = TableRow(this)
             tableRow.layoutParams = rowParams
