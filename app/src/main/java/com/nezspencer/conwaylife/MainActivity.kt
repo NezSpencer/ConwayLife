@@ -19,10 +19,9 @@ import com.nezspencer.conwaylife.databinding.ItemAliveBinding
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity(), CoroutineScope {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var boardItems: Array<Array<TextView>>
-    private lateinit var job: Job
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel : MainActivityViewModel
     private var rowInput : Int = 0
@@ -32,7 +31,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        job = Job()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         viewModel = ViewModelProviders.of(this)[MainActivityViewModel::class.java]
         viewModel.status.observe(this, Observer<Status> {stat ->
@@ -49,8 +47,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         binding.configSheet.btnConfigure.setOnClickListener{
 
             binding.board.removeAllViews()
-            configure(5, 5, ArrayList(alive))
-            sheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
+            configure(rowInput, columnInput, ArrayList(alive))
+            sheetBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
         }
         binding.configSheet.etRow.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {
@@ -99,7 +97,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun initializeAliveSpinner(row: Int, column: Int){
-        val list = mutableListOf<String>("Select Alive positions")
+        val list = mutableListOf("Select Alive positions")
 
         for (i in 0 until row)
             for (j in 0 until column) {
@@ -134,77 +132,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     }
 
-    /*private suspend fun startConway(row : Int, column : Int) {
-        for (i in 0 until row) {
-            for (j in 0 until column) {
-                //traverse through array
-                if (isAlive(i, j, row, column)) {
-                    boardItems[i][j].run {
-                        text = "1"
-                        setBackgroundResource(android.R.color.white)
-                    }
-                } else {
-                    boardItems[i][j].run {
-                        text = "0"
-                        setBackgroundResource(android.R.color.holo_red_dark)
-                    }
-                }
-            }
-        }
-    }*/
-
-    /*private suspend fun isAlive(rowIndex: Int, colIndex: Int, row : Int, column: Int): Boolean {
-        delay(200)
-        var aliveCount = 0
-        if (rowIndex % (row - 1) == 0 && colIndex % (column - 1) == 0) {
-            //sharpest edges
-            for (i in 0 until row step row - 1) {
-                for (j in 0 until column step column - 1) {
-                    if (i != rowIndex && j != colIndex && boardItems[i][j].text == "1") {
-                        aliveCount++
-                    }
-                }
-            }
-        } else if (rowIndex % (row - 1) == 0) {
-            //left and right edges
-            for (i in rowIndex - 1..rowIndex + 1 step 2) {
-                if (i < 0 || i >= row)
-                    continue
-                for (j in 0 until column step column - 1) {
-                    if (i != rowIndex && j != colIndex && boardItems[i][j].text == "1") {
-                        aliveCount++
-                    }
-                }
-            }
-        } else if (colIndex % (column - 1) == 0) {
-            //top and bottom edges
-            for (i in 0 until row step row - 1) {
-                for (j in colIndex - 1..colIndex + 1 step 2) {
-                    if (j < 0 || j >= column)
-                        continue
-                    if (i != rowIndex && j != colIndex && boardItems[i][j].text == "1") {
-                        aliveCount++
-                    }
-                }
-            }
-        }
-
-        //for positions within the normal range
-        for (i in rowIndex - 1..rowIndex + 1 step 2) {
-            if (i < 0 || i >= row)
-                continue
-            for (j in colIndex - 1..colIndex + 1 step 2) {
-                if (j < 0 || j >= column)
-                    continue
-                if (boardItems[i][j].text == "1")
-                    aliveCount++
-
-            }
-        }
-
-        return aliveCount == 2
-    }*/
-
 
 
     private fun configure(row: Int, column : Int, alive : MutableList<Pair<Int,Int>>){
@@ -212,8 +139,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT, 1f)
         val itemParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 1f)
         itemParams.setMargins(1, 1, 1, 1)
-
-        //variables
 
         boardItems = Array(row) { Array(column) { TextView(this) } }
         var boardMirror = Array(row) {Array(column) {0}}
@@ -264,9 +189,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             }
         }
     }
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
 
     inner class AlivePreviewAdapter(private val previewList : MutableList<Pair<Int, Int>>) : RecyclerView.Adapter<Holder>(){
 

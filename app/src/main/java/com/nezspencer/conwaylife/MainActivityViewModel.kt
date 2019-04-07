@@ -39,7 +39,7 @@ class MainActivityViewModel : ViewModel(), CoroutineScope{
     }
 
     private suspend fun isAlive(rowIndex: Int, colIndex: Int, row : Int, column: Int): Boolean {
-        delay(200)
+        delay(1000)
         var aliveCount = 0
         if (rowIndex % (row - 1) == 0 && colIndex % (column - 1) == 0) {
             //sharpest edges
@@ -90,45 +90,6 @@ class MainActivityViewModel : ViewModel(), CoroutineScope{
         return aliveCount == 2
     }
 
-    /*private fun configure(row: Int, column : Int, alive : MutableList<Pair<Int,Int>>){
-        val rowParams =
-            TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT, 1f)
-        val itemParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 1f)
-        itemParams.setMargins(1, 1, 1, 1)
-
-        //variables
-
-        boardItems = Array(row + 1) { Array(column) { TextView(this) } }
-        for (i in 0..row) {
-            val tableRow = TableRow(this)
-            tableRow.layoutParams = rowParams
-            val views = Array(column + 1) { TextView(this) }
-            for (j in 0..column) {
-
-                val textView = TextView(this)
-                textView.layoutParams = itemParams
-                textView.setBackgroundResource(android.R.color.holo_red_dark)
-                textView.text = "0"
-                val itemPair = Pair(i, j)
-                for (pair in alive) {
-                    if (itemPair.first == pair.first && itemPair.second == pair.second) {
-                        textView.text = "1"
-                        textView.setBackgroundResource(android.R.color.white)
-                        break
-                    }
-                }
-                views[j] = textView
-                tableRow.addView(textView)
-            }
-            boardItems[i] = views
-            binding.board.addView(tableRow)
-        }
-
-        launch {
-            startConway(row, column)
-            job.join()
-        }
-    }*/
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job

@@ -11,6 +11,7 @@
                 android:id="@+id/board"
                 android:layout_width="match_parent"
                 android:background="#88cc99"
+                android:layout_marginBottom="80dp"
                 android:layout_height="match_parent">
 
         </TableLayout>
